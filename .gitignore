@@ -24,13 +24,17 @@ target/
 /nbbuild/
 /dist/
 /nbdist/
-/.nb-gradle/
+.nb-gradle/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
 
 # Spring Boot Devtools
 restart/*.class

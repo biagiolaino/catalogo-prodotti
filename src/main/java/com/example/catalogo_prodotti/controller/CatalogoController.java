@@ -2,6 +2,9 @@ package com.example.catalogo_prodotti.controller;
 
 import com.example.catalogo_prodotti.model.Prodotto;
 import com.example.catalogo_prodotti.service.ProdottoService;
+import com.example.catalogo_prodotti.dto.ProdottoDTO;
+import com.example.catalogo_prodotti.mapper.ProdottoMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,29 +22,42 @@ public class CatalogoController {
     }
 
     @GetMapping
-    public List<Prodotto> getAllProdotti() {
-        return prodottoService.getAllProdotti();
+    public List<ProdottoDTO> getAllProdotti() {
+        return prodottoService.getAllProdotti()
+                .stream()
+                .map(ProdottoMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Prodotto> getProdottoById(@PathVariable String id) {
+    public ResponseEntity<ProdottoDTO> getProdottoById(@PathVariable String id) {
         return prodottoService.getProdotto(id)
+                .map(ProdottoMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Prodotto> createProdotto(@RequestBody Prodotto prodotto) {
-        Prodotto saved = prodottoService.addProdotto(prodotto);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    public ResponseEntity<ProdottoDTO> createProdotto(
+            @Valid @RequestBody ProdottoDTO dto) {
+
+        Prodotto entity = ProdottoMapper.toEntity(dto);
+        Prodotto saved = prodottoService.addProdotto(entity);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ProdottoMapper.toDTO(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Prodotto> updateProdotto(
+    public ResponseEntity<ProdottoDTO> updateProdotto(
             @PathVariable String id,
-            @RequestBody Prodotto prodotto) {
-        Prodotto updated = prodottoService.updateProdotto(id, prodotto);
-        return ResponseEntity.ok(updated);
+            @Valid @RequestBody ProdottoDTO dto) {
+
+        Prodotto entity = ProdottoMapper.toEntity(dto);
+        Prodotto updated = prodottoService.updateProdotto(id, entity);
+
+        return ResponseEntity.ok(ProdottoMapper.toDTO(updated));
     }
 
     @DeleteMapping("/{id}")
@@ -50,3 +66,4 @@ public class CatalogoController {
         return ResponseEntity.noContent().build();
     }
 }
+

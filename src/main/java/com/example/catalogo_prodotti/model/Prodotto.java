@@ -1,6 +1,7 @@
 package com.example.catalogo_prodotti.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "prodotti")
@@ -8,6 +9,7 @@ public class Prodotto {
 
     @Id
     private String id;
+    @Indexed(unique = true)
     private String nome;
     private String descrizione;
     private double prezzo;
@@ -41,5 +43,9 @@ public class Prodotto {
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
+
+    public String toString() {
+        return "{idProdotto: " + this.getId() + ", nome prodotto: " + this.getNome() + "}";
+    }
 
 }

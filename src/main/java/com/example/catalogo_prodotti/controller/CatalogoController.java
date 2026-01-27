@@ -1,5 +1,6 @@
 package com.example.catalogo_prodotti.controller;
 
+import com.example.catalogo_prodotti.dto.ProdottoQuantitaDTO;
 import com.example.catalogo_prodotti.model.Prodotto;
 import com.example.catalogo_prodotti.service.ProdottoService;
 import com.example.catalogo_prodotti.dto.ProdottoDTO;
@@ -37,13 +38,19 @@ public class CatalogoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<ProdottoDTO> getByNome(@PathVariable String nome) {
+        return prodottoService.getProdottoByNome(nome)
+                .map(ProdottoMapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<ProdottoDTO> createProdotto(
             @Valid @RequestBody ProdottoDTO dto) {
-
         Prodotto entity = ProdottoMapper.toEntity(dto);
         Prodotto saved = prodottoService.addProdotto(entity);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ProdottoMapper.toDTO(saved));
@@ -53,16 +60,23 @@ public class CatalogoController {
     public ResponseEntity<ProdottoDTO> updateProdotto(
             @PathVariable String id,
             @Valid @RequestBody ProdottoDTO dto) {
-
         Prodotto entity = ProdottoMapper.toEntity(dto);
         Prodotto updated = prodottoService.updateProdotto(id, entity);
-
         return ResponseEntity.ok(ProdottoMapper.toDTO(updated));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProdotto(@PathVariable String id) {
-        prodottoService.deleteProdotto(id);
+    @PutMapping("/nome/{nome}/quantita")
+    public ResponseEntity<ProdottoDTO> aggiornaQuantita(
+            @PathVariable String nome,
+            @Valid @RequestBody ProdottoQuantitaDTO dto) {
+        Prodotto aggiornato =
+                prodottoService.aggiungiQuantita(nome, dto.getQuantitaDaAggiungere());
+        return ResponseEntity.ok(ProdottoMapper.toDTO(aggiornato));
+    }
+
+    @DeleteMapping("/{nome}")
+    public ResponseEntity<Void> deleteProdotto(@PathVariable String nome) {
+        prodottoService.deleteProdotto(nome);
         return ResponseEntity.noContent().build();
     }
 }

@@ -7,7 +7,6 @@ public class ProdottoMapper {
 
     public static ProdottoDTO toDTO(Prodotto prodotto) {
         ProdottoDTO dto = new ProdottoDTO();
-        dto.setId(prodotto.getId());
         dto.setNome(prodotto.getNome());
         dto.setDescrizione(prodotto.getDescrizione());
         dto.setPrezzo(prodotto.getPrezzo());
@@ -18,7 +17,6 @@ public class ProdottoMapper {
 
     public static Prodotto toEntity(ProdottoDTO dto) {
         Prodotto p = new Prodotto();
-        p.setId(dto.getId());
         p.setNome(dto.getNome());
         p.setDescrizione(dto.getDescrizione());
         p.setPrezzo(dto.getPrezzo());

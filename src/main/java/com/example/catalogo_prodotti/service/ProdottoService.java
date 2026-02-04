@@ -52,27 +52,25 @@ public class ProdottoService {
         return prodottoRepository.save(prodotto);
     }
 
-
-    public Prodotto updateProdotto(String id, Prodotto prod) {
+    /* public Prodotto updateProdotto(String id, Prodotto prod) {
         return prodottoRepository.findById(id)
                 .map(prodotto -> {
                     prodotto.setNome(prod.getNome());
                     prodotto.setDescrizione(prod.getDescrizione());
                     prodotto.setPrezzo(prod.getPrezzo());
-                    prodotto.setQuantitaDisponibile(prodotto.getQuantitaDisponibile() + prod.getQuantitaDisponibile());
+                    prodotto.setQuantitaDisponibile(prod.getQuantitaDisponibile());
                     prodotto.setCategoria(prod.getCategoria());
                     return prodottoRepository.save(prodotto);
                 })
                 .orElseThrow(() -> new RuntimeException("Prodotto con id: " + id + " non trovato"));
-    }
+    } */
 
-    public Prodotto aggiungiQuantita(String nome, int quantitaDaAggiungere) {
+    public Prodotto updateProdotto(String nome, int quantitaDaAggiungere, double prezzo) {
         Prodotto prodotto = prodottoRepository.findByNome(nome)
                 .orElseThrow(() ->
                         new RuntimeException("Prodotto con nome " + nome + " non trovato"));
-        prodotto.setQuantitaDisponibile(
-                prodotto.getQuantitaDisponibile() + quantitaDaAggiungere
-        );
+        prodotto.setQuantitaDisponibile(prodotto.getQuantitaDisponibile() + quantitaDaAggiungere);
+        prodotto.setPrezzo(prezzo);
         return prodottoRepository.save(prodotto);
     }
 

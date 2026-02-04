@@ -2,16 +2,18 @@ package com.example.catalogo_prodotti.dto;
 
 import jakarta.validation.constraints.Min;
 
-public class ProdottoQuantitaDTO {
+public class ProdottoUpdateDTO {
 
-    @Min(1)
+    @Min(0)
     private int quantitaDaAggiungere;
+
+    private double prezzo;
 
     public int getQuantitaDaAggiungere() {
         return quantitaDaAggiungere;
     }
 
-    public void setQuantitaDaAggiungere(int quantitaDaAggiungere) {
-        this.quantitaDaAggiungere = quantitaDaAggiungere;
+    public double getPrezzo() {
+        return prezzo;
     }
 }

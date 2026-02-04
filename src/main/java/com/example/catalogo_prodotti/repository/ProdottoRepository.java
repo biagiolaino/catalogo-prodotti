@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProdottoRepository extends MongoRepository<Prodotto, String> {
 
     Optional<Prodotto> findByNome(String nome);
-    boolean existsByNome(String nome);
+    // boolean existsByNome(String nome);
     void deleteByNome(String nome);
 
 }

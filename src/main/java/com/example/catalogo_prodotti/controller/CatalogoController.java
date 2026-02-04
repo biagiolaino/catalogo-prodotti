@@ -1,6 +1,6 @@
 package com.example.catalogo_prodotti.controller;
 
-import com.example.catalogo_prodotti.dto.ProdottoQuantitaDTO;
+import com.example.catalogo_prodotti.dto.ProdottoUpdateDTO;
 import com.example.catalogo_prodotti.model.Prodotto;
 import com.example.catalogo_prodotti.service.ProdottoService;
 import com.example.catalogo_prodotti.dto.ProdottoDTO;
@@ -22,7 +22,7 @@ public class CatalogoController {
         this.prodottoService = prodottoService;
     }
 
-    @GetMapping
+    @GetMapping("/ricerca")
     public List<ProdottoDTO> getAllProdotti() {
         return prodottoService.getAllProdotti()
                 .stream()
@@ -30,15 +30,15 @@ public class CatalogoController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
+    /* @GetMapping("/ricerca/{id}")
     public ResponseEntity<ProdottoDTO> getProdottoById(@PathVariable String id) {
         return prodottoService.getProdotto(id)
                 .map(ProdottoMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+    } */
 
-    @GetMapping("/nome/{nome}")
+    @GetMapping("/ricerca/{nome}")
     public ResponseEntity<ProdottoDTO> getByNome(@PathVariable String nome) {
         return prodottoService.getProdottoByNome(nome)
                 .map(ProdottoMapper::toDTO)
@@ -46,7 +46,7 @@ public class CatalogoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/aggiungi")
     public ResponseEntity<ProdottoDTO> createProdotto(
             @Valid @RequestBody ProdottoDTO dto) {
         Prodotto entity = ProdottoMapper.toEntity(dto);
@@ -56,25 +56,24 @@ public class CatalogoController {
                 .body(ProdottoMapper.toDTO(saved));
     }
 
-    @PutMapping("/{id}")
+    /* @PutMapping("/{id}")
     public ResponseEntity<ProdottoDTO> updateProdotto(
             @PathVariable String id,
             @Valid @RequestBody ProdottoDTO dto) {
         Prodotto entity = ProdottoMapper.toEntity(dto);
         Prodotto updated = prodottoService.updateProdotto(id, entity);
         return ResponseEntity.ok(ProdottoMapper.toDTO(updated));
-    }
+    } */
 
-    @PutMapping("/nome/{nome}/quantita")
+    @PutMapping("/aggiorna/{nome}")
     public ResponseEntity<ProdottoDTO> aggiornaQuantita(
             @PathVariable String nome,
-            @Valid @RequestBody ProdottoQuantitaDTO dto) {
-        Prodotto aggiornato =
-                prodottoService.aggiungiQuantita(nome, dto.getQuantitaDaAggiungere());
+            @Valid @RequestBody ProdottoUpdateDTO dto) {
+        Prodotto aggiornato = prodottoService.updateProdotto(nome, dto.getQuantitaDaAggiungere(), dto.getPrezzo());
         return ResponseEntity.ok(ProdottoMapper.toDTO(aggiornato));
     }
 
-    @DeleteMapping("/{nome}")
+    @DeleteMapping("/elimina/{nome}")
     public ResponseEntity<Void> deleteProdotto(@PathVariable String nome) {
         prodottoService.deleteProdotto(nome);
         return ResponseEntity.noContent().build();

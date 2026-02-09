@@ -1,5 +1,6 @@
 package com.example.catalogo_prodotti.mapper;
 
+import com.example.catalogo_prodotti.dto.ProdottoCreateDTO;
 import com.example.catalogo_prodotti.model.Prodotto;
 import com.example.catalogo_prodotti.dto.ProdottoDTO;
 
@@ -7,6 +8,7 @@ public class ProdottoMapper {
 
     public static ProdottoDTO toDTO(Prodotto prodotto) {
         ProdottoDTO dto = new ProdottoDTO();
+        dto.setId(prodotto.getId());
         dto.setNome(prodotto.getNome());
         dto.setDescrizione(prodotto.getDescrizione());
         dto.setPrezzo(prodotto.getPrezzo());
@@ -16,6 +18,17 @@ public class ProdottoMapper {
     }
 
     public static Prodotto toEntity(ProdottoDTO dto) {
+        Prodotto p = new Prodotto();
+        p.setId(dto.getId());
+        p.setNome(dto.getNome());
+        p.setDescrizione(dto.getDescrizione());
+        p.setPrezzo(dto.getPrezzo());
+        p.setQuantitaDisponibile(dto.getQuantitaDisponibile());
+        p.setCategoria(dto.getCategoria());
+        return p;
+    }
+
+    public static Prodotto fromCreateDTO(ProdottoCreateDTO dto) {
         Prodotto p = new Prodotto();
         p.setNome(dto.getNome());
         p.setDescrizione(dto.getDescrizione());

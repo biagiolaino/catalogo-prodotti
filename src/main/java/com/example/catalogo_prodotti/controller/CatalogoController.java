@@ -1,5 +1,6 @@
 package com.example.catalogo_prodotti.controller;
 
+import com.example.catalogo_prodotti.dto.ProdottoCreateDTO;
 import com.example.catalogo_prodotti.dto.ProdottoUpdateDTO;
 import com.example.catalogo_prodotti.model.Prodotto;
 import com.example.catalogo_prodotti.service.ProdottoService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/prodotti")
+@RequestMapping("/prodotti")
 public class CatalogoController {
 
     private final ProdottoService prodottoService;
@@ -22,7 +23,7 @@ public class CatalogoController {
         this.prodottoService = prodottoService;
     }
 
-    @GetMapping("/ricerca")
+    @GetMapping
     public List<ProdottoDTO> getAllProdotti() {
         return prodottoService.getAllProdotti()
                 .stream()
@@ -30,26 +31,18 @@ public class CatalogoController {
                 .toList();
     }
 
-    /* @GetMapping("/ricerca/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProdottoDTO> getProdottoById(@PathVariable String id) {
         return prodottoService.getProdotto(id)
                 .map(ProdottoMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    } */
-
-    @GetMapping("/ricerca/{nome}")
-    public ResponseEntity<ProdottoDTO> getByNome(@PathVariable String nome) {
-        return prodottoService.getProdottoByNome(nome)
-                .map(ProdottoMapper::toDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/aggiungi")
+    @PostMapping
     public ResponseEntity<ProdottoDTO> createProdotto(
-            @Valid @RequestBody ProdottoDTO dto) {
-        Prodotto entity = ProdottoMapper.toEntity(dto);
+            @Valid @RequestBody ProdottoCreateDTO dto) {
+        Prodotto entity = ProdottoMapper.fromCreateDTO(dto);
         Prodotto saved = prodottoService.addProdotto(entity);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -65,17 +58,17 @@ public class CatalogoController {
         return ResponseEntity.ok(ProdottoMapper.toDTO(updated));
     } */
 
-    @PutMapping("/aggiorna/{nome}")
-    public ResponseEntity<ProdottoDTO> aggiornaQuantita(
+    @PutMapping("/{id}")
+    public ResponseEntity<ProdottoDTO> updateProdotto(
             @PathVariable String nome,
             @Valid @RequestBody ProdottoUpdateDTO dto) {
         Prodotto aggiornato = prodottoService.updateProdotto(nome, dto.getQuantitaDaAggiungere(), dto.getPrezzo());
         return ResponseEntity.ok(ProdottoMapper.toDTO(aggiornato));
     }
 
-    @DeleteMapping("/elimina/{nome}")
-    public ResponseEntity<Void> deleteProdotto(@PathVariable String nome) {
-        prodottoService.deleteProdotto(nome);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProdotto(@PathVariable String id) {
+        prodottoService.deleteProdotto(id);
         return ResponseEntity.noContent().build();
     }
 }

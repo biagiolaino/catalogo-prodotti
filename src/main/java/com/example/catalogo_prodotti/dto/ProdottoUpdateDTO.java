@@ -6,7 +6,6 @@ public class ProdottoUpdateDTO {
 
     @Min(0)
     private int quantitaDaAggiungere;
-
     private double prezzo;
 
     public int getQuantitaDaAggiungere() {

@@ -30,20 +30,14 @@ public class ProdottoService {
         return prodotto;
     }
 
-    public Optional<Prodotto> getProdottoByNome(String nome) {
-        return prodottoRepository.findByNome(nome);
-    }
-
     public Prodotto addProdotto(Prodotto prodotto) {
         Optional<Prodotto> existing =
-                prodottoRepository.findByNome(prodotto.getNome());
+                prodottoRepository.findById(prodotto.getNome());
         if (existing.isPresent()) {
             Prodotto p = existing.get();
-
             p.setQuantitaDisponibile(
                     p.getQuantitaDisponibile() + prodotto.getQuantitaDisponibile()
             );
-
             System.out.println("Prodotto esistente, quantità aggiornata");
             return prodottoRepository.save(p);
         }
@@ -74,13 +68,13 @@ public class ProdottoService {
         return prodottoRepository.save(prodotto);
     }
 
-    public void deleteProdotto(String nome) {
-        Optional<Prodotto> prodotto = prodottoRepository.findByNome(nome);
+    public void deleteProdotto(String id) {
+        Optional<Prodotto> prodotto = prodottoRepository.findById(id);
         if (prodotto.isEmpty()) {
-            System.out.println("Prodotto con id: " + nome + " non trovato");
+            System.out.println("Prodotto con id: " + id + " non trovato");
             return;
         }
-        prodottoRepository.deleteByNome(nome);
+        prodottoRepository.deleteById(id);
         System.out.println("Il prodotto è stato eliminato con successo");
     }
 

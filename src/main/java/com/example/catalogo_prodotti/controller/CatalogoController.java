@@ -49,20 +49,11 @@ public class CatalogoController {
                 .body(ProdottoMapper.toDTO(saved));
     }
 
-    /* @PutMapping("/{id}")
-    public ResponseEntity<ProdottoDTO> updateProdotto(
-            @PathVariable String id,
-            @Valid @RequestBody ProdottoDTO dto) {
-        Prodotto entity = ProdottoMapper.toEntity(dto);
-        Prodotto updated = prodottoService.updateProdotto(id, entity);
-        return ResponseEntity.ok(ProdottoMapper.toDTO(updated));
-    } */
-
     @PutMapping("/{id}")
     public ResponseEntity<ProdottoDTO> updateProdotto(
-            @PathVariable String nome,
+            @PathVariable String id,
             @Valid @RequestBody ProdottoUpdateDTO dto) {
-        Prodotto aggiornato = prodottoService.updateProdotto(nome, dto.getQuantitaDaAggiungere(), dto.getPrezzo());
+        Prodotto aggiornato = prodottoService.updateProdotto(id, dto.getQuantitaDaAggiungere(), dto.getPrezzo());
         return ResponseEntity.ok(ProdottoMapper.toDTO(aggiornato));
     }
 
